@@ -64,7 +64,21 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        idx = self._hash_mod(key)
+        if self.storage[idx] is None:
+            return
+        current = self.storage[idx]
+        if current. key == key:
+            self.storage[idx] = current.next
+            return
+        previous = current
+        while current:
+            if current.key == key:
+                previous.next = current.next
+                return
+            else:
+                previous = current
+                current = current.next
 
     def retrieve(self, key):
         '''
