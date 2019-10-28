@@ -1,21 +1,24 @@
 # '''
 # Linked List hash table key/value pair
 # '''
+
+
 class LinkedPair:
     def __init__(self, key, value):
         self.key = key
         self.value = value
         self.next = None
 
+
 class HashTable:
     '''
     A hash table that with `capacity` buckets
     that accepts string keys
     '''
+
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
-
 
     def _hash(self, key):
         '''
@@ -25,7 +28,6 @@ class HashTable:
         '''
         return hash(key)
 
-
     def _hash_djb2(self, key):
         '''
         Hash an arbitrary key using DJB2 hash
@@ -34,14 +36,12 @@ class HashTable:
         '''
         pass
 
-
     def _hash_mod(self, key):
         '''
         Take an arbitrary key and return a valid integer index
         within the storage capacity of the hash table.
         '''
         return self._hash(key) % self.capacity
-
 
     def insert(self, key, value):
         '''
@@ -51,9 +51,10 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
-
-
+        idx = self._hash_mod(key)
+        node = LinkedPair(key, value)
+        node.next = self.storage[idx]
+        self.storage[idx] = node
 
     def remove(self, key):
         '''
@@ -63,8 +64,22 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
-
+        idx = self._hash_mod(key)
+        if self.storage[idx] is None:
+            print('Warning, key not found')
+            return 
+        current = self.storage[idx]
+        if current.key == key:
+            self.storage[idx] = current.next
+            return
+        previous = current
+        while current:
+            if current.key == key:
+                previous.next = current.next
+                return
+            else:
+                previous = current
+                current = current.next
 
     def retrieve(self, key):
         '''
@@ -74,8 +89,13 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
-
+        idx = self._hash_mod(key)
+        current = self.storage[idx]
+        while current:
+            if current.key == key:
+                return current.value
+            current = current.next
+        return 
 
     def resize(self):
         '''
@@ -84,8 +104,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        self.capacity *= 2
+        new_hash_table = HashTable(self.capacity)
 
+        for data in self.storage:
+            current = data
+            while current:
+                new_hash_table.insert(current.key, current.value)
+                current = current.next
+            self.storage = new_hash_table.storage
 
 
 if __name__ == "__main__":
