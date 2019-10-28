@@ -66,9 +66,10 @@ class HashTable:
         '''
         idx = self._hash_mod(key)
         if self.storage[idx] is None:
-            return
+            print('Warning, key not found')
+            return 
         current = self.storage[idx]
-        if current. key == key:
+        if current.key == key:
             self.storage[idx] = current.next
             return
         previous = current
@@ -103,7 +104,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        self.capacity *= 2
+        new_hash_table = HashTable(self.capacity)
+
+        for data in self.storage:
+            current = data
+            while current:
+                new_hash_table.insert(current.key, current.value)
+                current = current.next
+            self.storage = new_hash_table.storage
 
 
 if __name__ == "__main__":
